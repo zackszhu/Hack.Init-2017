@@ -1,0 +1,81 @@
+<html>
+<head>
+	<title>Lighten Login</title>
+	<link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.css">
+	<script src="jquery.js"></script>
+	<script src="bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+</head>
+<body>
+	<script type="text/javascript">
+
+		$(function(){
+			$(".over-blur").on("mouseover", function(){
+				$(this).css("filter", "blur(5px) brightness(.5)");
+				$(this).parent().find(".name").animate({
+					"font-size": '+=20px',
+					"speed": 1000
+				});
+				$(this).animate({
+					"top": "-=29px",
+					"speed": 1000
+				})
+			});
+			$(".over-blur").on("mouseout", function(){
+				$(this).css("filter", "brightness(1)");
+				$(this).parent().find(".name").animate({
+					"font-size": '-=20px'
+				});
+				$(this).animate({
+					"top": "+=29px"
+				})
+			});	
+		});
+
+	</script>
+	<style>
+	</style>
+	<div style="width:100%; height: 70px; background: white; position: absolute; z-index: 10">
+		<div class="container">
+			<img src="image/4.png" width="150px" style="position: relative; top: -35px;"/>
+		</div>
+	</div>
+	<img src="image/3.jpg" width="100%" style="position: relative; filter: brightness(.5);"/>
+	<div style="text-align: center; width: 100%; position: absolute; z-index: 100; top: 300px; color: white; font-size: 40px; font-family: helvetica light;">Enlight your life</div>
+	<div style="text-align: center; width: 100%; position: absolute; z-index: 100; top: 380px; color: white; font-size: 60px; font-family: helvetica light;">ENLIGHT</div>
+	<div style="padding:50px; background: #F6F6F6">
+		<div class="container" style="padding-top: 20px">
+			<div class="row">
+				<div class="col-sm-6">
+					<img src="image/5.webp" width="100%"/>
+				</div>
+				<div class="col-sm-6" style="padding: 50px; background: white; height: 519px">
+					<p style="font-size: 40px; font-family: brandon-grot-w01-light, sans-serif;">INTRODUCTION</p>
+					<p style="font-size: 24px; font-family: brandon-grot-w01-light, sans-serif;">Life has never been looked this good</p>
+					<p style="font-size: 20px">忙碌时，动动手指，各处台灯即刻亮起。</p>
+					<p style="font-size: 20px">睡觉前，躺在被窝里，挥挥手即可关闭台灯。</p>
+					<p style="font-size: 20px">心有所想，顺手一指。</p>
+					<p style="font-size: 20px">随时随地，随心所意。</p>
+					<p style="font-size: 20px">在家，本应如此舒适。</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div style="padding:50px; background: #E5F0F1">
+	<div class="container" style="padding-top: 20px">
+		<div class="row">
+			<div class="col-lg-4" class="item-box">
+				<p class="name" style="position: relative; left: 20px; top: 20px; color:white; font-size: 40px; font-family: Microsoft YaHei; z-index: 10">落地灯</p>
+				<img class="over-blur" src="image/1.jpg" style="position: relative; left: 0px; top: -66px;" width="100%"/>
+			</div>
+			<div class="col-lg-4" class="item-box">
+				<p class="name" style="position: relative; left: 20px; top: 20px; color:white; font-size: 40px; font-family: Microsoft YaHei; z-index: 10">床头灯</p>
+				<img class="over-blur" src="image/2.jpg" style="position: relative; left: 0px; top: -66px;" width="100%"/>
+			</div>
+			<div class="col-lg-4" class="item-box">
+				<p class="name" style="position: relative; left: 20px; top: 20px; color:white; font-size: 40px; font-family: Microsoft YaHei; z-index: 10">&nbsp;</p>
+				<img class="over-blur" src="image/9.png" style="position: relative; left: 0px; top: -66px;" width="100%"/>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

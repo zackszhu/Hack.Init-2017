@@ -1,0 +1,136 @@
+<html>
+<head>
+	<title>Lighten</title>
+	<link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.css">
+	<script src="jquery.js"></script>
+	<script src="bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+	<script src="leap.js"></script>
+</head>
+<body>
+	<script>
+		cur = [];
+		function equals(a, b) {
+			var a0 = a[0], a1 = a[1], a2 = a[2];
+			var b0 = b[0], b1 = b[1], b2 = b[2];
+			return (Math.abs(a0 - b0) <= 0.02*Math.max(1.0, Math.abs(a0), Math.abs(b0)) && Math.abs(a1 - b1) <= 0.02*Math.max(1.0, Math.abs(a1), Math.abs(b1)) && Math.abs(a2 - b2) <= 0.02*Math.max(1.0, Math.abs(a2), Math.abs(b2)));
+		};
+		function judgeNewData(vn) {
+			l = cur.length - 1;
+			if (vn[0] == 0 && vn[1] == 0 && vn[2] == 0) {
+				return;
+			}
+			if (l == -1 || equals(cur[l], vn)) {
+				console.log("xiangdeng");
+				cur.push(vn);
+			} else {
+				console.log("fuck");
+				cur = [vn];
+			}
+			$("#X").val(vn[0]);
+			$("#Y").val(vn[1]);
+			$("#Z").val(vn[2]);
+			if (cur.length >= 100) {
+				console.log(vn);
+				stopLeap();
+			}
+		}
+		const controller = new Leap.Controller();
+		controller.on('frame', (frame) => {
+			currFrame = frame;
+			if (currFrame.hands.length > 0) {
+				currFinger = currFrame.hands[0].indexFinger.direction;
+			}
+			else {
+				currFinger = Leap.vec3.create();
+			}
+			// console.log(currFinger);
+			judgeNewData(currFinger);
+		});
+		function startLeap() {
+			controller.connect();
+			$("#selection-start").attr("disabled", true);
+			// $("#loading").css("display", "block");
+			$("#loading").fadeIn("slow");
+		}
+		function stopLeap() {
+			controller.disconnect();
+			// $("#loading").css("display", "none");	
+			$("#loading").fadeOut("slow", function(){
+				$("#selection-start").attr("disabled", false);
+			});	
+		}
+		function submit() {
+			$.ajax({
+				async: false,
+				type: "POST",
+				crossDomain: true,
+				url: "http://192.168.200.101:8000/add_furniture/",
+				data: {
+					id: $("#id").val(),
+					type: $("#type").val(),
+					ins_open: $("#open-ins").val(),
+					ins_close: $("#close-ins").val(),
+					direction1: $("#X").val(), 
+					direction2: $("#Y").val(),
+					direction3: $("#Z").val(),
+				},
+				success: function(data){
+					console.log(data);
+				}				
+			});
+		}		
+	</script>
+	<img src="image/3.jpg" width="100%" style="position:absolute; filter: brightness(.5);"/>
+	<div class="container">
+	<form class="form-horizontal" style="padding-top: 200px; background: #EEEEEE; color: white">
+		<div class="form-group">
+			<label for="id" class="col-lg-1 col-sm-2 control-label">标识:</label>
+			<div class="col-lg-11 col-sm-10">
+				<input type="text" class="form-control" id="id" placeholder="请输入该智能家居对应的标识...">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="type" class="col-lg-1 col-sm-2 control-label">分类:</label>
+			<div class="col-lg-11 col-sm-10">
+				<input type="text" class="form-control" id="type" placeholder="请输入该智能家居对应的分类...">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="instruction" class="col-lg-1 col-sm-2 control-label">指令:</label>
+			<div class="col-lg-11 col-sm-10">
+				<div class="row form-group">
+					<div class="col-sm-11">
+						<input type="text" class="form-control" id="open-ins" placeholder="请输入您希望用来打开该智能家居的指令...">
+					</div>
+					<label for="id" class="col-sm-1 control-label">开</label>
+				</div>
+				<div class="row form-group">
+					<div class="col-sm-11">
+						<input type="text" class="form-control" id="close-ins" placeholder="请输入您希望用来关闭该智能家居的指令...">
+					</div>
+					<label for="id" class="col-sm-1 control-label">关</label>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="direction" class="col-lg-1 col-sm-2 control-label">方向:</label>
+			<div class="col-lg-11 col-sm-10">
+				<div class="row form-group">
+					<div class="col-sm-4"><input type="text" readonly="readonly" class="form-control" id="X" placeholder="X坐标..."></div>
+					<div class="col-sm-4"><input type="text" readonly="readonly" class="form-control" id="Y" placeholder="Y坐标..."></div>
+					<div class="col-sm-4"><input type="text" readonly="readonly" class="form-control" id="Z" placeholder="Z坐标..."></div>
+				</div>
+				<div class="row form-group">
+					<div class="col-sm-10">在点击“开始选择”之后，请您指到正确的方向停留3秒。</div>
+					<div class="col-sm-2"><button id="selection-start" type="button" class="btn btn-success pull-right" onclick="startLeap()">开始选择</button></div>
+				</div>
+			</div>
+		</div>	
+		<div class="form-group" style="text-align: center">
+			<button type="button" class="btn btn-primary" onclick="submit()">提交</button>
+		</div>	
+	</form>
+	<div id="loading" style="text-align:center; display: none"><img src="image/compass.gif" style="max-width: 200px; display: inline-block;"/></div>
+	</div>
+</body>
+</html>
